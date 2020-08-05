@@ -1,0 +1,193 @@
+# File: ~/.config/i3/config
+
+set $mod Mod4
+font -*-tewi-medium-*-*-*-11-*-*-*-*-*-*
+gaps inner 15 #i3 gaps
+gaps outer 0 #i3 gaps
+new_window pixel 1
+focus_follows_mouse  no
+
+#don't move to neighbouring screen with hjkl
+force_focus_wrapping yes
+
+bindsym $mod+Return exec urxvt
+
+set $gray1 #252525
+set $gray2 #9A8C84 
+
+client.focused            $gray1   $gray2   $gray1   $gray2
+client.focused_inactive   $gray2   $gray1   $gray2   $gray1
+client.unfocused          $gray2   $gray1   $gray2   $gray1
+
+# use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# kill focused window
+bindsym $mod+q kill
+
+# start rofi 
+bindsym $mod+d exec --no-startup-id "rofi -show run rofi"
+
+#lock
+bindsym Control+$mod+l exec --no-startup-id i3lock-fancy -p
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# split in horizontal orientation
+bindsym $mod+v split h
+
+# split in vertical orientation
+bindsym $mod+g split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+
+# change container layout (tabbed, toggle split)
+bindsym $mod+n layout tabbed
+bindsym $mod+m layout toggle split
+
+# container navigation
+#bindsym $mod+d focus parent
+#bindsym $mod+b focus child
+
+# move container between displays
+bindsym $mod+semicolon move workspace to output right
+
+# toggle tiling / floating
+bindsym $mod+Shift+f floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# switch to last workspace
+#bindsym $mod+6 workspace back_and_forth
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+
+bindsym $mod+z reload
+bindsym $mod+Shift+x restart
+bindsym $mod+Shift+z exit
+bindsym $mod+Ctrl+x reboot
+
+mode "resize" {
+        bindsym h   resize shrink width 10 px or 10 ppt
+        bindsym j   resize grow height 10 px or 10 ppt
+        bindsym k   resize shrink height 10 px or 10 ppt
+        bindsym l   resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or q or ^[
+        bindsym Return mode "default"
+        bindsym q mode "default"
+        bindsym Escape mode "default"
+        bindcode Control+34 mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+mode "move" {
+        bindsym h   move left
+        bindsym j   move down
+        bindsym k   move up
+        bindsym l   move right
+
+        # back to normal: Enter or Escape or q or ^[
+        bindsym Return mode "default"
+        bindsym q mode "default"
+        bindsym Escape mode "default"
+        bindcode Control+34 mode "default"
+}
+
+bindsym $mod+b mode "move"
+
+# multimedia keys
+bindsym XF86AudioRaiseVolume exec amixer set Master 5%+ unmute
+bindsym XF86AudioLowerVolume exec amixer set Master 5%- unmute
+bindsym XF86AudioMute exec amixer -q set Master toggle
+bindsym XF86AudioMicMute exec "amixer -D pulse set Capture toggle
+
+bindsym XF86MonBrightnessUp exec xbacklight -inc 3 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 3 # decrease screen brightness
+
+bindsym XF86TouchpadToggle exec "synclient TouchpadOff=$(synclient | awk '/TouchpadOff/ {print ($3+1)%2}')"
+
+bindsym XF86Display exec "arandr"
+
+#printscreen
+bindsym --release Print exec scrot -q 100 '%Y-%m-%d-F_%H-%M-%S_%N_$wx$h.png' -e 'mv $f ~/Pictures/shots/'  
+
+#change layout
+exec --no-startup-id "setxkbmap -model pc105 -layout us,ru -option grp:lctrl_lshift_toggle"
+
+#no fucking beeeeep
+exec --no-startup-id nm-applet
+exec --no-startup-id xset b off
+
+
+#steam
+for_window [class="Steam"] floating enable
+
+#chrome
+assign [class="Google-chrome"] 3
+
+#music
+exec --no-startup-id mpd
+
+
+#player
+bindsym $mod+p exec "urxvt -title ncmpcpp -e /bin/bash -c ncmpcpp;bash" 
+for_window [title=ncmpcpp] floating enable
+bindsym $mod+o exec "mpc next"
+
+
+#compton
+#exec --no-startup-id compton -D 5 -r 12 -o 0.8
+#exec /usr/bin/compton --config /home/misha/.config/compton.conf
+exec compton
+
+#mc
+bindsym $mod+u exec "urxvt -title mc -e ~/.scripts/mccolor"
+
+#telegram
+for_window [class="TelegramDesktop"] floating enable
+bindsym $mod+t exec "telegram-desktop"
+
+#discord
+for_window [class="discord"] floating enable
+
+#workflowy
+bindsym $mod+w exec --no-startup-id workflowy
+for_window [class="WorkFlowy"] floating enable
+
+#polybar
+exec --no-startup-id polybar -c /home/misha/.config/polybar/config top
+for_window [class="Polybar"] gaps inner 0 #i3 gaps
