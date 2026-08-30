@@ -27,7 +27,7 @@ plugins=(cmdtime git nvm)
 source $ZSH/oh-my-zsh.sh
 
 
-alias personal="cd ~/vaults/personal && nvim index.md"
+alias personal="cd $HOME/vaults/personal && nvim index.md"
 
 alias n="nvim"
 alias vi="nvim"
@@ -37,7 +37,7 @@ alias vimdiff="nvim -d"
 
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export PATH="/opt/homebrew/opt/curl/bin:$PATH"
-export PATH="~/go/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
