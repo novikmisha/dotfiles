@@ -11,8 +11,8 @@ export DO_NOT_TRACK=1
 export DISABLE_AUTO_UPDATE=true
 
 # add completions
-fpath=("~/.oh-my-zsh/custom/completions" $fpath)
-fpath=("~/.docker/completions" $fpath)
+fpath=("$HOME/.oh-my-zsh/custom/completions" $fpath)
+fpath=("$HOME/.docker/completions" $fpath)
 FPATH="$(brew --prefix)/share/zsh/site-functions:/opt/homebrew/opt/curl/share/zsh/site-functions:${FPATH}"
 
 export ZSH="$HOME/.oh-my-zsh"
