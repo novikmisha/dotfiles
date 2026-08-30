@@ -11,8 +11,8 @@ export DO_NOT_TRACK=1
 export DISABLE_AUTO_UPDATE=true
 
 # add completions
-fpath=("/Users/mikhailnovik/.oh-my-zsh/custom/completions" $fpath)
-fpath=("/Users/mikhailnovik/.docker/completions" $fpath)
+fpath=("~/.oh-my-zsh/custom/completions" $fpath)
+fpath=("~/.docker/completions" $fpath)
 FPATH="$(brew --prefix)/share/zsh/site-functions:/opt/homebrew/opt/curl/share/zsh/site-functions:${FPATH}"
 
 export ZSH="$HOME/.oh-my-zsh"
@@ -28,9 +28,6 @@ source $ZSH/oh-my-zsh.sh
 
 
 alias personal="cd ~/vaults/personal && nvim index.md"
-alias prod="KUBECONFIG=~/.kube/config_prod k9s"
-alias stage="KUBECONFIG=~/.kube/config_stage k9s"
-
 
 alias n="nvim"
 alias vi="nvim"
@@ -40,7 +37,7 @@ alias vimdiff="nvim -d"
 
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export PATH="/opt/homebrew/opt/curl/bin:$PATH"
-export PATH="/Users/mikhailnovik/go/bin:$PATH"
+export PATH="~/go/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
