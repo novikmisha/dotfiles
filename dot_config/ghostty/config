@@ -1,0 +1,20 @@
+font-family = Fira Code
+font-style = Regular
+font-size = 12
+adjust-cell-width = -1
+bold-is-bright = true
+
+theme = Gruvbox Dark
+# window-colorspace = display-p3
+
+cursor-style-blink = true
+shell-integration-features = title
+
+window-padding-x = 15
+window-padding-y = 10
+window-padding-balance = true
+
+macos-icon = custom-style
+macos-icon-frame = plastic
+macos-icon-ghost-color = green
+macos-icon-screen-color = olive

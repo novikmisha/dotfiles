@@ -1,0 +1,50 @@
+#zmodload zsh/zprof
+
+# nvim as default editor
+export EDITOR='nvim'
+
+# don't show company info in claude
+export IS_DEMO=1
+# multiple cli's doesn't send metrics if this flag is enabled
+export DO_NOT_TRACK=1
+# disable oh-my-zsh auto update
+export DISABLE_AUTO_UPDATE=true
+
+# add completions
+fpath=("/Users/mikhailnovik/.oh-my-zsh/custom/completions" $fpath)
+fpath=("/Users/mikhailnovik/.docker/completions" $fpath)
+FPATH="$(brew --prefix)/share/zsh/site-functions:/opt/homebrew/opt/curl/share/zsh/site-functions:${FPATH}"
+
+export ZSH="$HOME/.oh-my-zsh"
+
+ZSH_THEME="my"
+
+zstyle ':omz:plugins:nvm' lazy yes
+zstyle ':omz:plugins:nvm' autoload yes
+
+plugins=(cmdtime git nvm)
+
+source $ZSH/oh-my-zsh.sh
+
+
+alias personal="cd ~/vaults/personal && nvim index.md"
+alias prod="KUBECONFIG=~/.kube/config_prod k9s"
+alias stage="KUBECONFIG=~/.kube/config_stage k9s"
+
+
+alias n="nvim"
+alias vi="nvim"
+alias vim="nvim"
+alias view="nvim -R"
+alias vimdiff="nvim -d"
+
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+export PATH="/Users/mikhailnovik/go/bin:$PATH"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+
+#zprof
