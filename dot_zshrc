@@ -28,6 +28,7 @@ source $ZSH/oh-my-zsh.sh
 
 
 alias personal="cd $HOME/vaults/personal && nvim index.md"
+alias work="cd $HOME/vaults/work && nvim index.md"
 
 alias n="nvim"
 alias vi="nvim"
