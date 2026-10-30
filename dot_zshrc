@@ -11,6 +11,7 @@ export DO_NOT_TRACK=1
 export DISABLE_AUTO_UPDATE=true
 
 # add completions
+typeset -U fpath
 fpath=(
     /opt/homebrew/share/zsh/site-functions
     /opt/homebrew/opt/curl/share/zsh/site-functions
