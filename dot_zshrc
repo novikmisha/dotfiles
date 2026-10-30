@@ -11,9 +11,13 @@ export DO_NOT_TRACK=1
 export DISABLE_AUTO_UPDATE=true
 
 # add completions
-fpath=("$HOME/.oh-my-zsh/custom/completions" $fpath)
-fpath=("$HOME/.docker/completions" $fpath)
-FPATH="$(brew --prefix)/share/zsh/site-functions:/opt/homebrew/opt/curl/share/zsh/site-functions:${FPATH}"
+fpath=(
+    /opt/homebrew/share/zsh/site-functions
+    /opt/homebrew/opt/curl/share/zsh/site-functions
+    "$HOME/.docker/completions"
+    "$HOME/.oh-my-zsh/custom/completions"
+    $fpath
+)
 
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -25,10 +29,16 @@ zstyle ':omz:plugins:nvm' autoload yes
 plugins=(cmdtime git nvm)
 
 source $ZSH/oh-my-zsh.sh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 
 alias personal="cd $HOME/vaults/personal && nvim index.md"
 alias work="cd $HOME/vaults/work && nvim index.md"
+
+alias prod='tsh proxy kube prod-k8s-app01 --exec-cmd sofka'
+alias dev='tsh proxy kube dev-k8s-app01 --exec-cmd sofka'
+
+
 
 alias n="nvim"
 alias vi="nvim"
@@ -36,13 +46,17 @@ alias vim="nvim"
 alias view="nvim -R"
 alias vimdiff="nvim -d"
 
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-export PATH="/opt/homebrew/opt/curl/bin:$PATH"
-export PATH="$HOME/go/bin:$PATH"
+path=(
+    /opt/homebrew/opt/libpq/bin
+    "$HOME/go/bin"
+    /opt/homebrew/opt/curl/bin
+    "${path[@]}"
+)
+
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-
 #zprof
+
