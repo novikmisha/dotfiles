@@ -57,5 +57,7 @@ path=(
 
 
 
-#zprof
+# shortcut: refresh the cached Worktrunk init after Worktrunk upgrades.
+[[ -r "$HOME/.cache/worktrunk-init.zsh" ]] && source "$HOME/.cache/worktrunk-init.zsh"
 
+#zprof
