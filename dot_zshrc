@@ -48,6 +48,7 @@ alias view="nvim -R"
 alias vimdiff="nvim -d"
 
 path=(
+    "$HOME/work_projects/nstack/bin"
     /opt/homebrew/opt/libpq/bin
     "$HOME/go/bin"
     /opt/homebrew/opt/curl/bin
