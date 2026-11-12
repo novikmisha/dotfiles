@@ -30,7 +30,7 @@ if rex.args ~= nil then
     local session = assert(ev.session_id or ctx.session_id, "Missing destroyed session ID")
     sql("DELETE FROM session_roots WHERE session_id = " .. quote(session))
   end)
-  local list = assert(rex.call("session.list"))
+  local list = assert(rex.call("session.attach_all", { event_scope = "session" }))
   local ids = {}
   for _, session in ipairs(list.sessions or {}) do
     ids[#ids + 1] = quote(session.session_id)
