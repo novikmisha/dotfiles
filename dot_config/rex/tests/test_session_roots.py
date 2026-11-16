@@ -172,6 +172,62 @@ with TemporaryDirectory(prefix="rex-root-test-") as temporary:
         )
         check_new_tab(action(created_id, "new_session_tab"), created_id, chosen)
 
+        def git(*args):
+            return subprocess.check_output(
+                ["git", "-C", str(project), *args], text=True, stderr=subprocess.PIPE
+            ).strip()
+
+        git("init", "-b", "main")
+        git("-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+            "commit", "--allow-empty", "-m", "base")
+        git("switch", "-c", "current-branch")
+        git("-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+            "commit", "--allow-empty", "-m", "current")
+        current_head = git("rev-parse", "HEAD")
+        for prompted in (False, True):
+            expected_branch = "feature/prompted" if prompted else "feature/named"
+            if prompted:
+                # Exercise the background script's CLI context without opening a dialog.
+                response = run(
+                    "do", "-s", first, "--json", "--args",
+                    json.dumps({"directory": str(project)}), "-e",
+                    'rex.exec = function() return {ok=true, stdout="feature/prompted\\n"} end; '
+                    'return dofile(os.getenv("HOME") .. "/.config/rex/worktree-prompt.lua")',
+                    check=False,
+                )
+            else:
+                response = action(first, "new_worktree_session", branch=expected_branch)
+            assert response.returncode == 0, response.stderr
+            envelope = json.loads(response.stdout)
+            created = envelope if prompted else envelope["result"]
+            created_id = created["session_id"]
+            sessions.append(created_id)
+            root = saved_root(created_id)
+            assert root and Path(root).is_dir()
+            worktree_git = ["git", "-C", root]
+            assert subprocess.check_output(
+                [*worktree_git, "rev-parse", "HEAD"], text=True
+            ).strip() == current_head
+            branch = subprocess.check_output(
+                [*worktree_git, "branch", "--show-current"], text=True
+            ).strip()
+            assert branch == expected_branch
+            assert git("branch", "--show-current") == "current-branch"
+            if prompted:
+                assert applescript("get id of current session").rsplit("/", 1)[-1] == created_id
+            else:
+                assert envelope["client_actions"][0]["args"]["session_id"] == created_id
+            wait_for_directory(
+                created_id, created["initial_windows"][0]["block_ids"][0], root
+            )
+            check_new_tab(action(created_id, "new_session_tab"), created_id, root)
+
+        before = {s["session_id"] for s in call("ls", "--json")["sessions"]}
+        for branch in ("feature/named", "bad name", "--invalid", ""):
+            assert action(first, "new_worktree_session", branch=branch).returncode != 0
+        assert action(second, "new_worktree_session", branch="not-a-repo").returncode != 0
+        assert {s["session_id"] for s in call("ls", "--json")["sessions"]} == before
+
         first_window = call("session", "inspect", first, "--json")["windows"][0][
             "window_id"
         ]
@@ -249,5 +305,5 @@ with TemporaryDirectory(prefix="rex-root-test-") as temporary:
             )
 
 print(
-    "Passed: folder sessions, SQLite roots, validation, isolation, rename, 8 app selections, and automatic cleanup"
+    "Passed: folder/worktree sessions, current-branch base, SQLite roots, validation, isolation, rename, 8 app selections, and automatic cleanup"
 )

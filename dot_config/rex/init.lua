@@ -92,6 +92,35 @@ rex.action({
 })
 
 rex.action({
+  name = "new_worktree_session",
+  title = "New Worktree Session from Current Branch…",
+  category = "Session",
+  args = { branch = "string?", directory = "string?" },
+  run = function(ctx, args)
+    local root = directory(ctx, args.directory)
+    local branch = args.branch
+    if branch == nil then
+      assert(rex.exec.start({
+        "/Applications/Rex Beta.app/Contents/Helpers/Rex Server.rex/Contents/MacOS/rex",
+        "do", os.getenv("HOME") .. "/.config/rex/worktree-prompt.lua",
+        "-s", assert(ctx.session_id), "-b", assert(ctx.block_id),
+        "--args", assert(rex.json.encode({ directory = root })),
+      }, { detach = true }))
+      return
+    end
+    assert(branch ~= "" and branch:sub(1, 1) ~= "-", "Invalid branch name")
+    local result = assert(rex.exec({
+      os.getenv("SHELL") or "/bin/zsh", "-lc", 'exec wt "$@"', "wt",
+      "-C", root, "switch", "--create", "--base=@", "--no-cd", "--format=json", branch,
+    }))
+    assert(result.ok, result.stderr)
+    local worktree = assert(rex.json.decode(result.stdout))
+    assert(type(worktree.path) == "string" and worktree.path:sub(1, 1) == "/", "Invalid worktree path")
+    return assert(rex.invoke("new_folder_session", { directory = worktree.path }))
+  end,
+})
+
+rex.action({
   name = "set_session_root",
   title = "Set Session Root to Current Directory",
   category = "Session",
